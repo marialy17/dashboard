@@ -18,6 +18,7 @@ import {
   DialogHeader,
   DialogTitle
 } from "@/components/ui/dialog";
+import { fetchQuery } from "convex/nextjs";
 
 // Registrar los módulos de AG Grid
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -54,7 +55,7 @@ const AccionesRenderer = (props: ICellRendererParams<Calificacion>) => {
       if (!props.data) return;
       await eliminarCalificacion({ id: props.data._id });
       setModalEliminar(false);
-      router.refresh(); // Forzar la recarga de la página
+      //router.refresh(); // Forzar la recarga de la página
     } catch (error) {
       console.error("Error al eliminar calificación:", error);
       alert("Error al eliminar calificación");
@@ -135,13 +136,14 @@ export function TablaCalificaciones() {
   const router = useRouter();
   const convex = useConvex();
   const [calificaciones, setCalificaciones] = useState<Calificacion[] | null>(null);
+  //const calificaciones = useQuery(api.calificaciones.obtenerCalificaciones);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const data = await convex.query(api.calificaciones.obtenerCalificaciones);
+      const data = await fetchQuery(api.calificaciones.obtenerCalificaciones);
       setCalificaciones(data);
     } catch (err) {
       setError("Failed to fetch data");
