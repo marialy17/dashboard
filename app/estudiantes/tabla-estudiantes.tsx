@@ -21,6 +21,12 @@ import {
 } from "@/components/ui/collapsible";
 import { api } from "@/convex/_generated/api";
 
+interface CalificacionEstudiante {
+    materia: string;
+    nota: number;
+    semestre: string;
+}
+
 export function TablaEstudiantes() {
     const router = useRouter();
     const estudiantes = useQuery(api.estudiantes.obtenerEstudiantes);
@@ -33,7 +39,7 @@ export function TablaEstudiantes() {
         if (!hasData) {
             return {};
         }
-        const grouped: Record<string, any[]> = {};
+        const grouped: Record<string, CalificacionEstudiante[]> = {};
         calificacionesData.forEach((calificacion) => {
             if (calificacion.estudiante?.id) {
                 if (!grouped[calificacion.estudiante.id]) {
