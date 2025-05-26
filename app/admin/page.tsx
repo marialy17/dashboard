@@ -73,7 +73,7 @@ export default function UsuariosPage() {
     e.preventDefault();
     setIsCreatingUser(true);
 
-    if (newUserPassword.length < 8) { // Validación de contraseña en el frontend
+    if (newUserPassword.length < 8) {
       toast.error("La contraseña debe tener al menos 8 caracteres.");
       setIsCreatingUser(false);
       return;
@@ -89,7 +89,7 @@ export default function UsuariosPage() {
           nombre: newUserName,
           correo: newUserEmail,
           rol: newUserRole,
-          password: newUserPassword, // <-- ENVIAMOS LA CONTRASEÑA AQUÍ
+          password: newUserPassword,
         }),
       });
 
@@ -103,11 +103,18 @@ export default function UsuariosPage() {
 
       setNewUserName('');
       setNewUserEmail('');
-      setNewUserPassword(''); // Limpiar campo de contraseña
+      setNewUserPassword('');
       setNewUserRole('user');
-    } catch (err: any) {
+    } catch (err: unknown) { // CAMBIO AQUÍ: err ahora es 'unknown'
       console.error("Error en handleCreateUser (frontend):", err);
-      toast.error(err.message || 'Error al crear usuario.');
+      // Verifica si el error es una instancia de Error o si tiene una propiedad 'message'
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else if (typeof err === 'object' && err !== null && 'message' in err && typeof (err as { message: unknown }).message === 'string') {
+        toast.error((err as { message: string }).message);
+      } else {
+        toast.error('Error al crear usuario.');
+      }
     } finally {
       setIsCreatingUser(false);
     }
@@ -150,14 +157,14 @@ export default function UsuariosPage() {
         return;
       }
 
-      const response = await fetch('/api/users', { // Llama a la nueva API Route
+      const response = await fetch('/api/users', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          id: editingUser._id, // ID de Convex
-          clerkUserId: editingUser.clerkId, // ID de Clerk
+          id: editingUser._id,
+          clerkUserId: editingUser.clerkId,
           ...updates,
         }),
       });
@@ -172,10 +179,18 @@ export default function UsuariosPage() {
 
       setIsEditDialogOpen(false);
       setEditingUser(null);
-    } catch (err: any) {
+    } catch (err: unknown) { // CAMBIO AQUÍ
       console.error('Error capturado en handleSaveEditedUser (frontend):', err);
-      setEditError(err.message || 'Error al editar usuario.');
-      toast.error(err.message || 'Error al editar usuario.');
+      if (err instanceof Error) {
+        setEditError(err.message);
+        toast.error(err.message);
+      } else if (typeof err === 'object' && err !== null && 'message' in err && typeof (err as { message: unknown }).message === 'string') {
+        setEditError((err as { message: string }).message);
+        toast.error((err as { message: string }).message);
+      } else {
+        setEditError('Error al editar usuario.');
+        toast.error('Error al editar usuario.');
+      }
     } finally {
       setIsSavingUser(false);
     }
@@ -187,14 +202,14 @@ export default function UsuariosPage() {
 
     if (confirm(`¿Estás seguro de que quieres ${accion} a este usuario (${userToUpdate.nombre})?`)) {
       try {
-        const response = await fetch('/api/users', { // Llama a la nueva API Route
-          method: 'PATCH', // Usamos PATCH para actualizar el estado
+        const response = await fetch('/api/users', {
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             id: userToUpdate._id,
-            clerkUserId: userToUpdate.clerkId, // Necesario para la API route aunque Clerk no tenga estado directo
+            clerkUserId: userToUpdate.clerkId,
             estado: nuevoEstado,
           }),
         });
@@ -206,9 +221,15 @@ export default function UsuariosPage() {
         }
 
         toast.success(result.message || `Usuario ${nuevoEstado} exitosamente.`);
-      } catch (err: any) {
+      } catch (err: unknown) { // CAMBIO AQUÍ
         console.error(`Error en handleBlockUnblock (frontend):`, err);
-        toast.error(err.message || `Error al ${accion} usuario.`);
+        if (err instanceof Error) {
+          toast.error(err.message);
+        } else if (typeof err === 'object' && err !== null && 'message' in err && typeof (err as { message: unknown }).message === 'string') {
+          toast.error((err as { message: string }).message);
+        } else {
+          toast.error(`Error al ${accion} usuario.`);
+        }
       }
     }
   };
@@ -216,7 +237,7 @@ export default function UsuariosPage() {
   const handleDeleteUser = async (userToDelete: Usuario) => {
     if (confirm(`¿Estás seguro de que quieres eliminar a este usuario (${userToDelete.nombre})? Esta acción es irreversible y lo eliminará de Clerk y Convex.`)) {
       try {
-        const response = await fetch('/api/users', { // Llama a la nueva API Route
+        const response = await fetch('/api/users', {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -234,9 +255,15 @@ export default function UsuariosPage() {
         }
 
         toast.success(result.message || "Usuario eliminado exitosamente.");
-      } catch (err: any) {
+      } catch (err: unknown) { // CAMBIO AQUÍ
         console.error(`Error en handleDeleteUser (frontend):`, err);
-        toast.error(err.message || 'Error al eliminar usuario.');
+        if (err instanceof Error) {
+          toast.error(err.message);
+        } else if (typeof err === 'object' && err !== null && 'message' in err && typeof (err as { message: unknown }).message === 'string') {
+          toast.error((err as { message: string }).message);
+        } else {
+          toast.error('Error al eliminar usuario.');
+        }
       }
     }
   };
