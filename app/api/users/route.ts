@@ -9,6 +9,7 @@ import { api } from "@/convex/_generated/api";
 
 const clerk = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY! });
 const resend = new Resend(process.env.RESEND_API_KEY!);
+// Asegúrate de que las variables de entorno CLERK_SECRET_KEY y RES
 
 export async function POST(request: Request) {
   try {
