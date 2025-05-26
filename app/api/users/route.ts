@@ -154,7 +154,7 @@ export async function PATCH(request: Request) {
     const updatesConvex: { nombre?: string; correo?: string; estado?: "activo" | "bloqueado"; rol?: string; } = {};
 
     let newEmailCreatedId: string | null = null;
-    let newEmailAddressToSet: string | undefined = undefined;
+    // let newEmailAddressToSet: string | undefined = undefined;
 
     // 1. Manejar actualización de Nombre
     if (nombre !== undefined && nombre !== currentUser.firstName) {
@@ -205,7 +205,7 @@ export async function PATCH(request: Request) {
           emailAddress: correo,
         });
         newEmailCreatedId = newEmailObject.id; // Guarda el ID para el caso de fallo
-        newEmailAddressToSet = newEmailObject.emailAddress; // Guarda la dirección
+        // newEmailAddressToSet = newEmailObject.emailAddress; // Guarda la dirección
 
         // Marcar como verificada y primaria inmediatamente (para admin)
         await clerk.emailAddresses.updateEmailAddress(newEmailObject.id, {
