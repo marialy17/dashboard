@@ -58,7 +58,7 @@ export async function POST(request: Request) {
     // El enlace ya no es para "reset-password" de Clerk, sino una página de inicio de sesión o un dashboard.
     // Opcionalmente, podrías apuntar a una página personalizada como /initial-setup donde el usuario podría cambiar la contraseña.
     const loginUrl = `${baseUrl}/sign-in`; // Página de inicio de sesión estándar de Clerk
-    const changePasswordUrl = `${baseUrl}/change-password`; // Una página personalizada para cambiarla si quieres.
+    // const changePasswordUrl = `${baseUrl}/change-password`; // Una página personalizada para cambiarla si quieres.
 
     const { data: emailResult, error: emailError } = await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL!,
