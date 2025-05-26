@@ -16,11 +16,9 @@ import {
 } from "lucide-react"
 import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -28,7 +26,7 @@ import {
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 import { Button } from "./ui/button"
-import { SignedIn, SignedOut } from "@clerk/nextjs"
+import { SignedIn } from "@clerk/nextjs"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const data = {
