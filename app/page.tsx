@@ -20,6 +20,7 @@ export default function Home() {
     <main className="min-h-screen flex items-center justify-center transition-opacity">
       <div className="max-w-4xl w-full text-center">
         <h1 className="text-4xl font-bold mb-8 transition-opacity">Bienvenido al Sistema Escolar</h1>
+        <h1 className="text-4xl font-bold mb-8 transition-opacity">Hola Soy Goku</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {sections.map((section) => (
             <a
